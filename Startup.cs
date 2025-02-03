@@ -5,6 +5,7 @@ using DTH.API.Services.HomeProjectServices;
 using DTH.API.Services.UserServices;
 using DTH.API.Utility;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 namespace DTH.API
 {
@@ -25,11 +26,24 @@ namespace DTH.API
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                     options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
                 });
+
             services.AddDbContext<HomeProjectDbContext>(options =>
                 options.UseSqlite("Data Source=HomeProjects.db"));
             services.AddDbContext<UserDbContext>(options =>
                 options.UseSqlite("Data Source=Users.db"));
+
             services.AddLogging();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "DTH API",
+                    Version = "v1.0",
+                    Description = "API documentation for DTH project"
+                });
+            });
+
             services.AddScoped<CreateUserService>();
             services.AddScoped<GetUserService>();
             services.AddScoped<GetHomeProjectByProjectId>();
@@ -55,12 +69,20 @@ namespace DTH.API
                 app.UseHsts();
             }
 
-            app.UseMiddleware<BasicAuthMiddleware>();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "DTH_HomeProjectAPI");
+                c.RoutePrefix = "swagger"; 
+            });
+
+            app.UseMiddleware<BasicAuthMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

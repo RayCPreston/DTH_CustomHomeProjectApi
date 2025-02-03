@@ -24,6 +24,13 @@ namespace DTH.API.Middleware
             {
                 using (IServiceScope scope = _serviceProvider.CreateScope())
                 {
+                    string path = context.Request.Path;
+                    if (path.StartsWith("/swagger", StringComparison.OrdinalIgnoreCase) ||
+                        path.StartsWith("/favicon.ico", StringComparison.OrdinalIgnoreCase))
+                    {
+                        await _next(context);
+                        return;
+                    }
                     GetUserService getUserService = scope.ServiceProvider.GetRequiredService<GetUserService>();
                     IHeaderDictionary headers = context.Request.Headers;
                     if (!headers.AuthorizationHeaderNotNullAndValid(getUserService))
