@@ -2,7 +2,7 @@
 using DTH.API.Exceptions;
 using DTH.API.Models;
 
-namespace DTH.API.Services
+namespace DTH.API.Services.HomeProjectServices
 {
     public class GetHomeProjectsByStatusService
     {

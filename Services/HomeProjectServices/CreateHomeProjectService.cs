@@ -3,15 +3,15 @@ using DTH.API.Exceptions;
 using DTH.API.Models;
 using DTH.API.Utility;
 
-namespace DTH.API.Services
+namespace DTH.API.Services.HomeProjectServices
 {
     public class CreateHomeProjectService
     {
         private readonly ILogger<CreateHomeProjectService> _logger;
         private readonly HomeProjectDbContext _context;
         private readonly GetHomeProjectByProjectId _getHomeProjectByProjectId;
-        public CreateHomeProjectService(ILogger<CreateHomeProjectService> logger, 
-            HomeProjectDbContext context, 
+        public CreateHomeProjectService(ILogger<CreateHomeProjectService> logger,
+            HomeProjectDbContext context,
             GetHomeProjectByProjectId getHomeProjectByProjectId)
         {
             _logger = logger;
@@ -43,7 +43,7 @@ namespace DTH.API.Services
                 {
                     homeProject.ProjectStatus = ProjectStatus.NotStarted;
                 }
-                if(_getHomeProjectByProjectId.GetHomeProject(homeProject.ProjectId) != null)
+                if (_getHomeProjectByProjectId.GetHomeProject(homeProject.ProjectId) != null)
                 {
                     throw new AlreadyExistsException($"ProjectId {homeProject.ProjectId} already exists.", "014");
                 }

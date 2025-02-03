@@ -1,6 +1,9 @@
 using System.Text.Json.Serialization;
 using DTH.API.Data;
-using DTH.API.Services;
+using DTH.API.Middleware;
+using DTH.API.Services.HomeProjectServices;
+using DTH.API.Services.UserServices;
+using DTH.API.Utility;
 using Microsoft.EntityFrameworkCore;
 
 namespace DTH.API
@@ -23,7 +26,11 @@ namespace DTH.API
                 });
             services.AddDbContext<HomeProjectDbContext>(options =>
                 options.UseSqlite("Data Source=HomeProjects.db"));
+            services.AddDbContext<UserDbContext>(options =>
+                options.UseSqlite("Data Source=Users.db"));
             services.AddLogging();
+            services.AddScoped<CreateUserService>();
+            services.AddScoped<GetUserService>();
             services.AddScoped<GetHomeProjectByProjectId>();
             services.AddScoped<CreateHomeProjectService>();
             services.AddScoped<DeleteHomeProjectService>();
@@ -46,6 +53,8 @@ namespace DTH.API
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
+
+            app.UseMiddleware<BasicAuthMiddleware>();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

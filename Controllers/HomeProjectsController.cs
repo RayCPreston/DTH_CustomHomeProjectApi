@@ -1,7 +1,6 @@
-﻿using System.Text.Json;
-using DTH.API.Exceptions;
+﻿using DTH.API.Exceptions;
 using DTH.API.Models;
-using DTH.API.Services;
+using DTH.API.Services.HomeProjectServices;
 using DTH.API.Utility;
 using Microsoft.AspNetCore.Mvc;
 
@@ -71,7 +70,7 @@ namespace DTH.API.Controllers
             {
                 return Ok(_homeProjectsService.GetAllHomeProjects().ToHomeProjectDTOList());
             }
-            catch (NotFoundException ex)
+            catch (NotFoundException)
             {
                 return NoContent();
             }
@@ -81,6 +80,27 @@ namespace DTH.API.Controllers
                 return StatusCode(500, ErrorUtil.CreateError("005", ex.Message));
             }
         }
+
+        [HttpGet]
+        [Route("get/homeproject/projectid/{projectId}")]
+        public IActionResult GetHomeProject(string projectId)
+        {
+            try
+            {
+                HomeProject? homeProject = _homeProjectsService.GetHomeProjectByProjectId(projectId);
+                if (homeProject == null)
+                {
+                    return NoContent();
+                }
+                return Ok(homeProject);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Exception occurred in HomeProjectsController.GetHomeProjectByProjectId {ex.Message}");
+                return StatusCode(500, ErrorUtil.CreateError("005", ex.Message));
+            }
+        }
+
 
         [HttpGet]
         [Route("get/homeprojects/clientname/{clientName}")]

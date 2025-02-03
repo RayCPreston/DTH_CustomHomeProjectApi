@@ -2,7 +2,7 @@
 using DTH.API.Exceptions;
 using DTH.API.Models;
 
-namespace DTH.API.Services
+namespace DTH.API.Services.HomeProjectServices
 {
     public class GetHomeProjectByProjectId
     {
@@ -19,7 +19,6 @@ namespace DTH.API.Services
         /// </summary>
         /// <param name="projectId">string</param>
         /// <returns>HomeProject</returns>
-        /// <exception cref="NotFoundException">Thrown when HomeProject is not found</exception>
         public HomeProject? GetHomeProject(string projectId)
         {
             try
@@ -31,6 +30,10 @@ namespace DTH.API.Services
                 HomeProject? homeProject = _context.HomeProjects
                     .Where(hp => hp.ProjectId != null && hp.ProjectId.ToLower() == projectId.ToLower())
                     .FirstOrDefault();
+                if (homeProject == null)
+                {
+                    return null;
+                }
                 return homeProject;
             }
             catch (Exception ex)

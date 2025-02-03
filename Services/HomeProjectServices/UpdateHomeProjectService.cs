@@ -3,7 +3,7 @@ using DTH.API.Exceptions;
 using DTH.API.Models;
 using DTH.API.Utility;
 
-namespace DTH.API.Services
+namespace DTH.API.Services.HomeProjectServices
 {
     public class UpdateHomeProjectService
     {
@@ -40,7 +40,7 @@ namespace DTH.API.Services
                     throw new ValidationFailedException("ProjectId is required.", "064");
                 }
                 HomeProject? existingProject = _getHomeProjectByProjectId.GetHomeProject(homeProject.ProjectId);
-                if(existingProject == null)
+                if (existingProject == null)
                 {
                     throw new NotFoundException($"ProjectId {homeProject.ProjectId} not found.", "044");
                 }

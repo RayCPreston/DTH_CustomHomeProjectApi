@@ -1,12 +1,13 @@
 using DTH.API.Models;
 
-namespace DTH.API.Services
+namespace DTH.API.Services.HomeProjectServices
 {
     public class HomeProjectsService
     {
         private readonly CreateHomeProjectService _createHomeProjectService;
         private readonly DeleteHomeProjectService _deleteHomeProjectService;
         private readonly GetAllHomeProjects _getAllHomeProjectsService;
+        private readonly GetHomeProjectByProjectId _getHomeProjectByProjectId;
         private readonly GetHomeProjectsByClientNameService _getHomeProjectsByClientNameService;
         private readonly GetHomeProjectsByProjectNameService _getHomeProjectsByProjectNameService;
         private readonly GetHomeProjectsByStatusService _getHomeProjectsByStatusService;
@@ -16,6 +17,7 @@ namespace DTH.API.Services
             CreateHomeProjectService createHomeProjectService,
             DeleteHomeProjectService deleteHomeProjectService,
             GetAllHomeProjects getAllHomeProjectsService,
+            GetHomeProjectByProjectId getHomeProjectByProjectId,
             GetHomeProjectsByClientNameService getHomeProjectsByClientNameService,
             GetHomeProjectsByProjectNameService getHomeProjectsByProjectNameService,
             GetHomeProjectsByStatusService getHomeProjectsByStatusService,
@@ -24,12 +26,13 @@ namespace DTH.API.Services
             _createHomeProjectService = createHomeProjectService;
             _deleteHomeProjectService = deleteHomeProjectService;
             _getAllHomeProjectsService = getAllHomeProjectsService;
+            _getHomeProjectByProjectId = getHomeProjectByProjectId;
             _getHomeProjectsByClientNameService = getHomeProjectsByClientNameService;
             _getHomeProjectsByProjectNameService = getHomeProjectsByProjectNameService;
             _getHomeProjectsByStatusService = getHomeProjectsByStatusService;
             _updateHomeProjectService = updateHomeProjectService;
         }
-        
+
         /// <summary>
         /// Creates a new HomeProject record in the database using a HomeProjectDbContext
         /// </summary>
@@ -38,7 +41,7 @@ namespace DTH.API.Services
         /// <exception cref="ValidationFailedException">Thrown when HomeProject is not valid</exception>
         /// <exception cref="AlreadyExistsException">Thrown when HomeProject with the same ProjectId already exists</exception>
         public HomeProject CreateHomeProject(HomeProject homeProject) => _createHomeProjectService.CreateHomeProject(homeProject);
-        
+
         /// <summary>
         /// Deletes a HomeProject record from the DB using a projectId as the lookup.
         /// </summary>
@@ -53,6 +56,14 @@ namespace DTH.API.Services
         /// <returns>List&lt;HomeProject&gt;</returns>
         /// <exception cref="NotFoundException">Thrown when no HomeProjects are found</exception>
         public List<HomeProject> GetAllHomeProjects() => _getAllHomeProjectsService.GetHomeProjects();
+
+        /// <summary>
+        /// Returns a HomeProject with a ProjectId matching the passed parameter.
+        /// Returns null if no match is found.
+        /// </summary>
+        /// <param name="projectId">string</param>
+        /// <returns>HomeProject</returns>
+        public HomeProject? GetHomeProjectByProjectId(string projectId) => _getHomeProjectByProjectId.GetHomeProject(projectId);
 
         /// <summary>
         /// Returns a List of HomeProjects where the ClientName matches passed parameter.
