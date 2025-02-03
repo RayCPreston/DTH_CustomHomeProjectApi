@@ -23,6 +23,7 @@ namespace DTH.API
                 .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
                 });
             services.AddDbContext<HomeProjectDbContext>(options =>
                 options.UseSqlite("Data Source=HomeProjects.db"));
